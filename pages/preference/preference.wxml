@@ -1,0 +1,87 @@
+<view class="page">
+  <!-- 统计条 -->
+  <view class="stat-bar" wx:if="{{list.length}}">
+    <view class="stat-item">
+      <view class="stat-num">{{favCount}}</view>
+      <view class="stat-label">最爱</view>
+    </view>
+    <view class="stat-sep"></view>
+    <view class="stat-item">
+      <view class="stat-num">{{avoidCount}}</view>
+      <view class="stat-label">避开</view>
+    </view>
+    <view class="stat-sep"></view>
+    <view class="stat-item">
+      <view class="stat-num">{{list.length}}</view>
+      <view class="stat-label">全部</view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="card empty" wx:if="{{!loading && !list.length}}">
+    <view class="empty-ico">💝</view>
+    <view class="empty-title">记下 TA 的喜好</view>
+    <view class="empty-sub">爱吃的、爱喝的、讨厌的、想去的地方
+忘了的时候就翻一翻</view>
+    <button class="primary-btn" bindtap="openForm">+ 记一条</button>
+  </view>
+
+  <!-- 按分类分组 -->
+  <view class="card" wx:for="{{groups}}" wx:key="category">
+    <view class="card-title">{{item.category}}</view>
+    <view class="pref-row" wx:for="{{item.items}}" wx:for-item="p" wx:key="id">
+      <view class="pref-ico {{p.is_favorite ? 'fav' : 'avoid'}}">
+        {{p.is_favorite ? '❤️' : '🚫'}}
+      </view>
+      <view class="pref-body">
+        <view class="pref-title">{{p.title}}</view>
+        <view class="pref-detail" wx:if="{{p.detail}}">{{p.detail}}</view>
+      </view>
+      <view class="pref-acts">
+        <text class="pact" bindtap="openForm" data-id="{{p.id}}">改</text>
+        <text class="pact danger" bindtap="del" data-id="{{p.id}}">删</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="fab" bindtap="openForm" data-id="">＋</button>
+
+  <!-- 表单 -->
+  <view class="mask" wx:if="{{showForm}}" bindtap="closeForm"></view>
+  <view class="sheet" wx:if="{{showForm}}">
+    <view class="sheet-head">
+      <text class="sheet-title">{{editingId ? '编辑' : '记一条'}}</text>
+      <text class="sheet-close" bindtap="closeForm">✕</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">分类</text>
+      <view class="chips">
+        <view class="chip {{form.category === item ? 'sel' : ''}}" wx:for="{{categories}}" wx:key="*this"
+              data-cat="{{item}}" bindtap="onCategory">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">喜欢还是避开</text>
+      <view class="chips">
+        <view class="chip {{form.is_favorite ? 'sel' : ''}}" data-fav="1" bindtap="onFav">❤️ 喜欢</view>
+        <view class="chip {{!form.is_favorite ? 'sel' : ''}}" data-fav="0" bindtap="onFav">🚫 避开</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">名称</text>
+      <input class="form-input" value="{{form.title}}" placeholder="比如：番茄炒蛋、香菜、海边"
+             placeholder-class="ph" bindinput="onTitle" maxlength="30" />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">备注</text>
+      <textarea class="form-input area" value="{{form.detail}}" placeholder="为什么、什么情况下、具体到什么程度…"
+                placeholder-class="ph" bindinput="onDetail" maxlength="120" />
+    </view>
+
+    <button class="primary-btn" bindtap="submit">{{editingId ? '保存' : '记下'}}</button>
+  </view>
+</view>
