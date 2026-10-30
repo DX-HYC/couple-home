@@ -1,0 +1,123 @@
+<view class="page">
+  <!-- 资料卡 -->
+  <view class="card">
+    <view class="card-title">我的资料</view>
+    <view class="profile">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image wx:if="{{avatarUrl}}" class="p-avatar" src="{{avatarUrl}}" mode="aspectFill" />
+        <view wx:else class="p-avatar ph">{{avatarInitial}}</view>
+        <view class="avatar-badge">换</view>
+      </button>
+      <view class="p-info">
+        <input class="nick-display" type="nickname" value="{{nickname}}" bindblur="onNicknameBlur"
+               placeholder="点这里设置昵称" placeholder-class="ph" maxlength="20" />
+        <view class="muted">TA 看到的也是这个名字</view>
+      </view>
+    </view>
+    <view class="p-actions">
+      <text class="mini-btn" bindtap="chooseAvatar">从相册上传头像</text>
+    </view>
+  </view>
+
+  <!-- 伴侣 -->
+  <view class="card" wx:if="{{coupled}}">
+    <view class="card-title">我的伴侣</view>
+    <view class="partner-row">
+      <image wx:if="{{partnerAvatar}}" class="p-avatar sm" src="{{partnerAvatar}}" mode="aspectFill" />
+      <view wx:else class="p-avatar sm ph">{{partnerInitial}}</view>
+      <view class="p-info">
+        <view class="p-name">{{partnerName}}</view>
+        <view class="muted">TA 的昵称和头像由 TA 自己设置</view>
+      </view>
+    </view>
+    <view class="p-actions" wx:if="{{inviteCode}}">
+      <text class="mini-btn" bindtap="copyInvite">复制邀请码 {{inviteCode}}</text>
+    </view>
+  </view>
+
+  <!-- 在一起的时间 -->
+  <view class="card" wx:if="{{coupled}}">
+    <view class="card-title">在一起的时间</view>
+    <block wx:if="{{durHasValue}}">
+      <view class="dur-box">
+        <view class="dur-now">{{durText}}</view>
+        <view class="muted" wx:if="{{relationStartText}}">从 {{relationStartText}} 开始</view>
+      </view>
+    </block>
+    <view class="muted" wx:else>还没有设置在一起的日子</view>
+
+    <view class="p-actions">
+      <text class="mini-btn" bindtap="openTimeForm">{{durHasValue ? '修改' : '设置'}}</text>
+      <text class="mini-btn plain" wx:if="{{durHasValue}}" bindtap="clearRelationTime">清除</text>
+    </view>
+  </view>
+
+  <!-- 未绑定 -->
+  <view class="card" wx:else>
+    <view class="card-title">情侣关系</view>
+    <view class="muted unbound">还没有绑定情侣，绑定后解锁纪念日、日记、相册、位置和点菜。</view>
+    <button class="primary-btn" bindtap="goBind">去绑定</button>
+  </view>
+
+  <!-- 消息通知 -->
+  <view class="card">
+    <view class="card-title">消息提醒</view>
+
+    <block wx:if="{{templatesReady}}">
+      <view class="muted sub">
+        微信的「一次性订阅」规则：每授权一次只能收到一条消息。所以多在纪念日、点菜时授权，就能攒下额度。
+      </view>
+      <view class="tpl-row" wx:for="{{templates}}" wx:key="name">
+        <view class="tpl-info">
+          <view class="tpl-name">{{item.name}}</view>
+        </view>
+        <text class="tpl-state ready">已配置</text>
+      </view>
+      <button class="primary-btn" bindtap="onSubscribe" style="margin-top:24rpx;">开启订阅通知</button>
+    </block>
+
+    <block wx:else>
+      <view class="muted sub">还没有配置订阅消息模板。</view>
+      <view class="guide-steps">
+        <view class="guide-step"><text class="gs-num">1</text>登录 mp.weixin.qq.com → 功能 → 订阅消息</view>
+        <view class="guide-step"><text class="gs-num">2</text>在「公共模板库」搜「纪念日」「点餐」，各挑一个加入</view>
+        <view class="guide-step"><text class="gs-num">3</text>把生成的 tpl_ 开头 ID 填进 <text class="code">utils/subscribe.config.js</text></view>
+        <view class="guide-step"><text class="gs-num">4</text>重新编译，本页会变成「已配置」</view>
+      </view>
+      <view class="muted sub" style="margin-top:20rpx;">详细图文步骤见项目内 docs/订阅消息配置指南.md</view>
+    </block>
+  </view>
+
+  <!-- 危险操作 -->
+  <view class="card" wx:if="{{coupled}}">
+    <view class="card-title">其他</view>
+    <view class="mini-btn danger" bindtap="unbind">解除情侣关系</view>
+  </view>
+
+  <view class="foot">情侣小屋 · 数据只属于你们两个人</view>
+
+  <!-- 在一起时间表单 -->
+  <view class="mask" wx:if="{{showTimeForm}}" bindtap="closeTimeForm">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">在一起的时间</view>
+      <view class="muted sub">精确到分钟，之后每一秒都会实时增长。</view>
+
+      <view class="field">
+        <view class="field-label">日期</view>
+        <picker mode="date" value="{{formDate}}" bindchange="onFormDate" start="1900-01-01" end="2100-12-31">
+          <view class="picker-value">{{formDate || '请选择日期'}}</view>
+        </picker>
+      </view>
+
+      <view class="field">
+        <view class="field-label">时间</view>
+        <picker mode="time" value="{{formTime}}" bindchange="onFormTime">
+          <view class="picker-value">{{formTime}}</view>
+        </picker>
+      </view>
+
+      <button class="primary-btn" bindtap="saveRelationTime" loading="{{saving}}" disabled="{{saving}}">保存</button>
+      <button class="ghost-btn close-btn" bindtap="closeTimeForm">取消</button>
+    </view>
+  </view>
+</view>
