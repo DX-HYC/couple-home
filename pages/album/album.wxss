@@ -1,0 +1,206 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+.album-bar {
+  white-space: nowrap;
+  background: #fff;
+  padding: 20rpx 0;
+}
+
+.album-tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16rpx 28rpx;
+  margin: 0 8rpx;
+  border-radius: 20rpx;
+  background: #fff5f7;
+  position: relative;
+}
+
+.album-tab.active {
+  background: #ff6b81;
+}
+
+.album-emoji {
+  font-size: 40rpx;
+  line-height: 1.2;
+}
+
+.album-name {
+  font-size: 24rpx;
+  margin-top: 6rpx;
+  color: #666;
+}
+
+.album-tab.active .album-name {
+  color: #fff;
+}
+
+.album-count {
+  position: absolute;
+  top: 8rpx;
+  right: 12rpx;
+  font-size: 20rpx;
+  color: #bbb;
+}
+
+.album-tab.active .album-count {
+  color: #fff;
+}
+
+.album-tab.add {
+  background: #f7f7f9;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx 8rpx;
+}
+
+.tb-title {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.tb-actions {
+  display: flex;
+}
+
+.tb-btn {
+  font-size: 24rpx;
+  color: #ff6b81;
+  margin-left: 24rpx;
+}
+
+.tb-btn.danger {
+  color: #ff3b30;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 12rpx 16rpx;
+}
+
+.grid-item {
+  width: 33.33%;
+  padding: 8rpx;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.media {
+  width: 100%;
+  height: 220rpx;
+  border-radius: 16rpx;
+  background: #f0f0f0;
+  display: block;
+}
+
+/* 签名链接未就绪时的占位，签名完成即替换 */
+.media.skeleton {
+  background: #f0f0f0;
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+.video-box {
+  position: relative;
+}
+
+.play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 30rpx;
+}
+
+.del-badge {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 38rpx;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 28rpx;
+}
+
+.who {
+  font-size: 20rpx;
+  color: #aaa;
+  text-align: center;
+  margin-top: 4rpx;
+}
+
+/* 弹层 */
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheet {
+  width: 100%;
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 32rpx;
+  box-sizing: border-box;
+}
+
+.sheet-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  margin-bottom: 28rpx;
+}
+
+.ph {
+  color: #ccc;
+}
+
+.emoji-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.emoji-opt {
+  font-size: 44rpx;
+  padding: 8rpx 14rpx;
+  border-radius: 12rpx;
+  opacity: 0.45;
+}
+
+.emoji-opt.sel {
+  opacity: 1;
+  background: #fff0f3;
+}
+
+.close-btn {
+  margin-top: 20rpx;
+}
