@@ -1,0 +1,94 @@
+<view class="page">
+  <view wx:if="{{loading && !list.length}}" class="empty">
+    <view class="muted">正在加载…</view>
+  </view>
+
+  <view wx:elif="{{!list.length}}" class="empty">
+    <view style="font-size:80rpx;margin-bottom:20rpx;">📖</view>
+    <view>还没有日记</view>
+    <view class="muted" style="margin-top:12rpx;">写下今天的点滴吧</view>
+  </view>
+
+  <view class="diary-list" wx:else>
+  <view class="card diary-card" wx:for="{{list}}" wx:key="id">
+    <view class="head">
+      <image wx:if="{{item._avatarUrl}}" class="avatar" src="{{item._avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar ph-avatar">{{item._isMine ? '我' : 'TA'}}</view>
+      <view class="head-info">
+        <view class="who">
+          {{item._isMine ? '我' : (item.owner_name || '对方')}}
+          <text class="mine-tag" wx:if="{{item._isMine}}">我</text>
+        </view>
+        <view class="muted time">
+          {{item._time}}
+          <text wx:if="{{item.mood}}"> · {{item.mood}}</text>
+          <text wx:if="{{item.weather}}"> {{item.weather}}</text>
+        </view>
+      </view>
+      <text class="del" wx:if="{{item._isMine}}" bindtap="del" data-id="{{item.id}}">删除</text>
+    </view>
+
+    <view class="content">{{item.content}}</view>
+
+    <view class="images" wx:if="{{item._images.length}}">
+      <view class="img-wrap" wx:for="{{item._images}}" wx:for-item="img" wx:for-index="imgIdx" wx:key="*this">
+        <image class="diary-img" src="{{img}}" mode="aspectFill" lazy-load
+               bindtap="previewDiaryImage" data-src="{{img}}" data-urls="{{item._images}}"
+               binderror="onImgError" data-diary="{{index}}" data-idx="{{imgIdx}}" />
+        <view class="img-failed" wx:if="{{item._failed[imgIdx]}}" bindtap="retryLoad"
+              data-diary="{{index}}">加载失败 点此重试</view>
+      </view>
+    </view>
+
+    <view class="loc" wx:if="{{item.location_name}}" bindtap="openMap"
+          data-lat="{{item.latitude}}" data-lng="{{item.longitude}}"
+          data-name="{{item.location_name}}" data-addr="{{item.location_name}}">
+      📍 {{item.location_name}}
+    </view>
+  </view>
+  </view>
+
+  <button class="primary-btn add-btn" bindtap="openForm">+ 写一篇日记</button>
+
+  <!-- 写日记 -->
+  <view class="mask" wx:if="{{showForm}}" bindtap="closeForm">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">今天想记点什么</view>
+
+      <textarea class="content-input" value="{{content}}" bindinput="onContent" auto-height
+                placeholder="今天发生了什么…" placeholder-class="ph" maxlength="2000" />
+
+      <view class="picker-row">
+        <view class="picker-label">心情</view>
+        <text wx:for="{{moodOptions}}" wx:key="*this"
+              class="opt {{mood === item ? 'sel' : ''}}" data-mood="{{item}}" bindtap="onMood">{{item}}</text>
+      </view>
+
+      <view class="picker-row">
+        <view class="picker-label">天气</view>
+        <text wx:for="{{weatherOptions}}" wx:key="*this"
+              class="opt {{weather === item ? 'sel' : ''}}" data-weather="{{item}}" bindtap="onWeather">{{item}}</text>
+      </view>
+
+      <view class="loc-pick">
+        <text wx:if="{{locationName}}" class="loc-set">📍 {{locationName}}　<text class="clear" catchtap="clearLocation">清除</text></text>
+        <text wx:else class="loc-none" bindtap="pickLocation">+ 添加地点（微信定位）</text>
+      </view>
+
+      <view class="picker-row">
+        <view class="picker-label">配图</view>
+        <text class="opt add" bindtap="chooseImages">+ {{images.length}}/9</text>
+      </view>
+
+      <view class="img-grid" wx:if="{{images.length}}">
+        <view class="img-box" wx:for="{{images}}" wx:key="path">
+          <image class="img" src="{{item.path}}" mode="aspectFill" bindtap="previewImage" data-src="{{item.path}}" />
+          <text class="img-del" catchtap="removeImage" data-index="{{index}}">×</text>
+        </view>
+      </view>
+
+      <button class="primary-btn" bindtap="save" loading="{{saving}}" disabled="{{saving}}">发表</button>
+      <button class="ghost-btn close-btn" bindtap="closeForm">取消</button>
+    </view>
+  </view>
+</view>
