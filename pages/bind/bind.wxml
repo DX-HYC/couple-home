@@ -1,0 +1,55 @@
+<view class="page">
+  <view class="tabs">
+    <view class="tab {{tab === 'create' ? 'active' : ''}}" bindtap="switchTab" data-tab="create">我来邀请</view>
+    <view class="tab {{tab === 'join' ? 'active' : ''}}" bindtap="switchTab" data-tab="join">我有邀请码</view>
+  </view>
+
+  <view class="card" wx:if="{{tab === 'create'}}">
+    <view class="card-title">生成邀请码</view>
+    <view class="muted desc">生成后把邀请码发给 TA，或者直接分享小程序卡片。绑定成功后全部功能才会解锁。</view>
+
+    <view class="field">
+      <view class="field-label">在一起的日子（选填）</view>
+      <picker mode="date" value="{{relationDate}}" bindchange="onDateChange" start="1900-01-01" end="2100-12-31">
+        <view class="picker-value">{{relationDate ? relationDate : '请选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <view class="field-label">具体时间</view>
+      <picker mode="time" value="{{relationTime}}" bindchange="onTimeChange">
+        <view class="picker-value">{{relationTime}}</view>
+      </picker>
+      <view class="muted time-tip">选了日期和时间，首页就能精确到秒实时计时</view>
+    </view>
+
+    <view class="invite-result" wx:if="{{inviteCode}}">
+      <view class="invite-label">你的邀请码</view>
+      <view class="invite-code" bindtap="copyInvite">{{inviteCode}}</view>
+      <view class="muted">点击复制 · 有效期到 TA 绑定为止</view>
+    </view>
+
+    <button class="primary-btn" bindtap="generateInvite" loading="{{loading}}" disabled="{{loading}}">
+      {{inviteCode ? '重新生成邀请码' : '生成邀请码'}}
+    </button>
+    <button class="ghost-btn share-btn" open-type="share">分享给 TA</button>
+  </view>
+
+  <view class="card" wx:if="{{tab === 'join'}}">
+    <view class="card-title">输入 TA 的邀请码</view>
+    <view class="muted desc">向 TA 要一下邀请码，6 位大写字母或数字</view>
+
+    <view class="field">
+      <view class="field-label">邀请码</view>
+      <input class="field-input code-input" maxlength="6" value="{{inputCode}}" bindinput="onInputCode" placeholder="例如 A1B2C3" placeholder-class="ph" />
+    </view>
+
+    <button class="primary-btn" bindtap="bindPartner" loading="{{loading}}" disabled="{{loading}}">绑定情侣</button>
+    <view class="muted center-tip" bindtap="copyInputCode">粘贴剪贴板</view>
+  </view>
+
+  <view class="notice">
+    <view class="notice-title">关于数据隔离</view>
+    <view>每对情侣的数据完全独立。只有互相绑定的两个人能看到彼此的日记、相册、纪念日和位置，其他人看不到任何内容。</view>
+  </view>
+</view>
