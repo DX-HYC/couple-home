@@ -1,0 +1,72 @@
+<view class="page">
+  <scroll-view class="album-bar" scroll-x enable-flex>
+    <view class="album-tab {{current && current.id === item.id ? 'active' : ''}}"
+          wx:for="{{albums}}" wx:key="id" bindtap="onTapAlbum" data-id="{{item.id}}">
+      <text class="album-emoji">{{item.emoji}}</text>
+      <text class="album-name">{{item.name}}</text>
+      <text class="album-count">{{item.count}}</text>
+    </view>
+    <view class="album-tab add" bindtap="openAlbumForm">
+      <text class="album-emoji">＋</text>
+      <text class="album-name">新建</text>
+    </view>
+  </scroll-view>
+
+  <view class="toolbar" wx:if="{{current}}">
+    <view class="tb-title">{{current.emoji}} {{current.name}}</view>
+    <view class="tb-actions">
+      <text class="tb-btn" bindtap="uploadImages">📷 照片</text>
+      <text class="tb-btn" bindtap="uploadVideo">🎬 视频</text>
+      <text class="tb-btn danger" bindtap="delAlbum" data-id="{{current.id}}" data-name="{{current.name}}">删除</text>
+    </view>
+  </view>
+
+  <view wx:if="{{loading && !items.length}}" class="empty">
+    <view class="muted">正在加载…</view>
+  </view>
+
+  <view wx:elif="{{!items.length}}" class="empty">
+    <view style="font-size:80rpx;margin-bottom:20rpx;">📷</view>
+    <view>这个相册还是空的</view>
+    <view class="muted" style="margin-top:12rpx;">上传你们的照片和视频吧</view>
+  </view>
+
+  <view class="grid">
+    <view class="grid-item" wx:for="{{items}}" wx:key="id">
+      <block wx:if="{{item.media_type === 'image'}}">
+        <!-- 签名未就绪时先占位，避免布局跳动；lazy-load 让屏幕外的图延后下载 -->
+        <image wx:if="{{item._url}}" class="media" src="{{item._url}}" mode="aspectFill" lazy-load
+               bindtap="preview" data-url="{{item._url}}" />
+        <view wx:else class="media skeleton" />
+      </block>
+      <block wx:else>
+        <view class="video-box" bindtap="playVideo" data-url="{{item._url}}">
+          <image wx:if="{{item._url}}" class="media" src="{{item._url}}" mode="aspectFill" lazy-load />
+          <view wx:else class="media skeleton" />
+          <text class="play">▶</text>
+        </view>
+      </block>
+      <text class="del-badge" bindtap="del" data-id="{{item.id}}" data-path="{{item.file_path}}">×</text>
+      <view class="who" wx:if="{{item.owner_name}}">{{item.owner_name}}</view>
+    </view>
+  </view>
+
+  <view class="mask" wx:if="{{showAlbumForm}}" bindtap="closeAlbumForm">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">新建相册分类</view>
+      <view class="field">
+        <view class="field-label">名称</view>
+        <input class="field-input" value="{{albumName}}" bindinput="onAlbumName" placeholder="例如：去过的城市" placeholder-class="ph" />
+      </view>
+      <view class="field">
+        <view class="field-label">图标</view>
+        <view class="emoji-row">
+          <text wx:for="{{emojiOptions}}" wx:key="*this"
+                class="emoji-opt {{albumEmoji === item ? 'sel' : ''}}" data-emoji="{{item}}" bindtap="onAlbumEmoji">{{item}}</text>
+        </view>
+      </view>
+      <button class="primary-btn" bindtap="createAlbum">创建</button>
+      <button class="ghost-btn close-btn" bindtap="closeAlbumForm">取消</button>
+    </view>
+  </view>
+</view>
