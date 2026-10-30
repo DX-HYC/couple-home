@@ -1,0 +1,8 @@
+{
+  "usingComponents": {},
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark",
+  "backgroundColor": "#fff2f6",
+  "navigationBarBackgroundColor": "#ffa3b6",
+  "navigationBarTitleText": "情侣小屋"
+}
