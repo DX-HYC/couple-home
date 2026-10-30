@@ -1,0 +1,540 @@
+.page {
+  min-height: 100vh;
+  padding: 24rpx 24rpx 140rpx;
+  background: linear-gradient(180deg, #fff5f7 0%, #fff 30%);
+}
+
+/* ---------- 预测主卡片 ---------- */
+.pred-card {
+  position: relative;
+  border-radius: 28rpx;
+  overflow: hidden;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 129, 0.16);
+}
+
+.pred-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, #ffb3c1 0%, #ff6b81 55%, #ff8fa3 100%);
+}
+
+.pred-bg::after {
+  content: '';
+  position: absolute;
+  left: -80rpx;
+  bottom: -80rpx;
+  width: 280rpx;
+  height: 280rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.pred-inner {
+  position: relative;
+  padding: 32rpx 30rpx;
+  color: #fff;
+}
+
+.pred-phase {
+  margin-bottom: 12rpx;
+}
+
+.phase-badge {
+  font-size: 22rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 24rpx;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.phase-badge.p-period {
+  background: rgba(255, 255, 255, 0.32);
+  font-weight: 600;
+}
+
+.phase-badge.p-fertile {
+  background: rgba(255, 236, 179, 0.85);
+  color: #8a5a00;
+}
+
+.phase-badge.p-normal {
+  background: rgba(206, 240, 220, 0.85);
+  color: #1e6b42;
+}
+
+.pred-main {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 6rpx;
+}
+
+.pred-num {
+  font-size: 104rpx;
+  font-weight: 300;
+  line-height: 0.9;
+  letter-spacing: -3rpx;
+}
+
+.pred-unit {
+  font-size: 28rpx;
+  margin-left: 10rpx;
+  opacity: 0.9;
+}
+
+.pred-date {
+  font-size: 25rpx;
+  opacity: 0.92;
+  margin-bottom: 24rpx;
+}
+
+/* ---------- 学习面板 ---------- */
+.learn-box {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 20rpx;
+  padding: 22rpx;
+}
+
+.learn-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.learn-title {
+  font-size: 25rpx;
+  font-weight: 600;
+}
+
+.learn-conf {
+  font-size: 21rpx;
+  background: rgba(255, 255, 255, 0.24);
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+}
+
+.learn-row {
+  display: flex;
+  margin-bottom: 16rpx;
+}
+
+.learn-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.lv {
+  font-size: 30rpx;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.lk {
+  font-size: 20rpx;
+  opacity: 0.82;
+  margin-top: 6rpx;
+}
+
+.learn-bar {
+  height: 8rpx;
+  background: rgba(255, 255, 255, 0.24);
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.learn-fill {
+  height: 100%;
+  background: #fff;
+  border-radius: 4rpx;
+  transition: width 0.4s ease;
+}
+
+.learn-note {
+  font-size: 21rpx;
+  opacity: 0.9;
+  margin-top: 14rpx;
+  line-height: 1.5;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.card-title::before {
+  content: '';
+  width: 6rpx;
+  height: 26rpx;
+  background: #ff6b81;
+  border-radius: 3rpx;
+  margin-right: 12rpx;
+}
+
+/* ---------- 温馨提醒 ---------- */
+.tip-card {
+  background: linear-gradient(135deg, #fff9fa, #fff0f3);
+  border: 1rpx solid rgba(255, 107, 129, 0.1);
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.tip-item:last-child {
+  margin-bottom: 0;
+}
+
+.tip-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: #ff6b81;
+  margin: 12rpx 14rpx 0 0;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  flex: 1;
+  font-size: 25rpx;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ---------- 关键日期 ---------- */
+.kd-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+}
+
+.kd-item {
+  background: #fafafa;
+  border-radius: 18rpx;
+  padding: 22rpx 18rpx;
+}
+
+.kd-label {
+  font-size: 21rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.kd-val {
+  font-size: 27rpx;
+  font-weight: 600;
+  color: #444;
+}
+
+.kd-val.main {
+  color: #ff6b81;
+  font-size: 30rpx;
+}
+
+.kd-hint {
+  font-size: 20rpx;
+  color: #bbb;
+  margin-top: 18rpx;
+  line-height: 1.5;
+}
+
+/* ---------- 记录 ---------- */
+.rec-row {
+  display: flex;
+  align-items: flex-start;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.rec-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.rec-date {
+  width: 84rpx;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff5f7;
+  border-radius: 14rpx;
+  padding: 10rpx 0;
+  margin-right: 18rpx;
+}
+
+.rec-m {
+  font-size: 20rpx;
+  color: #ff6b81;
+}
+
+.rec-d {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #ff6b81;
+  line-height: 1.1;
+}
+
+.rec-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rec-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  align-items: center;
+  margin-bottom: 6rpx;
+}
+
+.rec-flow {
+  font-size: 20rpx;
+  padding: 3rpx 14rpx;
+  border-radius: 18rpx;
+  background: #f0f0f0;
+  color: #777;
+}
+
+.rec-flow.f-light {
+  background: #eef4ff;
+  color: #5b7ec2;
+}
+
+.rec-flow.f-heavy {
+  background: #ffeaea;
+  color: #e0435f;
+}
+
+.rec-len,
+.rec-gap {
+  font-size: 21rpx;
+  color: #999;
+}
+
+.rec-sym {
+  font-size: 22rpx;
+  color: #666;
+  margin-top: 4rpx;
+}
+
+.rec-note {
+  font-size: 22rpx;
+  color: #888;
+  line-height: 1.5;
+  margin-top: 4rpx;
+}
+
+.rec-acts {
+  flex-shrink: 0;
+  display: flex;
+  gap: 6rpx;
+}
+
+.ract {
+  font-size: 22rpx;
+  color: #ff6b81;
+  padding: 6rpx 12rpx;
+  background: #fff5f7;
+  border-radius: 20rpx;
+}
+
+.ract.danger {
+  color: #aaa;
+  background: #f5f5f5;
+}
+
+/* ---------- 空状态 ---------- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 40rpx;
+}
+
+.empty-ico {
+  font-size: 84rpx;
+  margin-bottom: 20rpx;
+}
+
+.empty-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12rpx;
+}
+
+.empty-sub {
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 32rpx;
+}
+
+/* ---------- 悬浮按钮 ---------- */
+.fab {
+  position: fixed;
+  right: 32rpx;
+  bottom: 48rpx;
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff8fa3, #ff6b81);
+  color: #fff;
+  font-size: 56rpx;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 28rpx rgba(255, 107, 129, 0.38);
+  border: none;
+  line-height: 1;
+  padding: 0;
+  z-index: 50;
+}
+
+.fab::after {
+  border: none;
+}
+
+/* ---------- 底部表单 ---------- */
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 90;
+}
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 32rpx 32rpx 48rpx;
+  z-index: 100;
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28rpx;
+}
+
+.sheet-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.sheet-close {
+  font-size: 30rpx;
+  color: #bbb;
+  padding: 8rpx;
+}
+
+.form-row {
+  margin-bottom: 26rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 25rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  background: #f7f7f8;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  font-size: 27rpx;
+  box-sizing: border-box;
+}
+
+.form-input.area {
+  height: 140rpx;
+  line-height: 1.5;
+}
+
+.ph {
+  color: #bbb;
+}
+
+.form-picker {
+  background: #f7f7f8;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  font-size: 27rpx;
+  color: #333;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.chip {
+  font-size: 24rpx;
+  padding: 12rpx 24rpx;
+  border-radius: 28rpx;
+  background: #f2f2f4;
+  color: #666;
+  border: 2rpx solid transparent;
+}
+
+.chip.sel {
+  background: #ffeef1;
+  color: #ff6b81;
+  border-color: #ff6b81;
+  font-weight: 500;
+}
+
+.form-tip {
+  font-size: 21rpx;
+  color: #bbb;
+  margin-top: 12rpx;
+  line-height: 1.5;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, #ff8fa3, #ff6b81);
+  color: #fff;
+  font-size: 29rpx;
+  font-weight: 500;
+  border-radius: 44rpx;
+  line-height: 88rpx;
+  border: none;
+  margin-top: 12rpx;
+}
+
+.primary-btn::after {
+  border: none;
+}
