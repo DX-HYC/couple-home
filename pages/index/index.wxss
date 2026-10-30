@@ -1,0 +1,710 @@
+/* ==================================================================
+   首页样式
+   设计语言：
+   - Hero 渐变头部（情侣卡片）→ 浅色内容区，圆角过渡
+   - 内容统一用「白色圆角卡片 + 柔和粉色阴影」
+   - 统一左右边距 24rpx，网格卡片对齐到同一条基准线
+   ================================================================== */
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 48rpx;
+  background: linear-gradient(180deg, #fff2f6 0%, #f8f8fc 55%, #f4f5fa 100%);
+}
+
+/* ---------- Hero 骨架屏 ----------
+   会话恢复期间占位。天气与功能区不依赖登录，此时已经在渲染，
+   所以这里只需要把顶部撑住，不整页空着。 */
+.sk-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sk-circle {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.sk-heart {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  margin: 0 20rpx;
+}
+
+.sk-bar {
+  height: 32rpx;
+  width: 240rpx;
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.22);
+  margin: 28rpx auto 0;
+}
+
+/* ==================================================================
+   Hero 头部
+   ================================================================== */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(165deg, #ffa3b6 0%, #ff7b93 48%, #f45f7d 100%);
+  border-radius: 0 0 40rpx 40rpx;
+  padding: 44rpx 36rpx 40rpx;
+  color: #fff;
+}
+
+/* 背景装饰光晕 */
+.deco {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.d1 {
+  width: 320rpx;
+  height: 320rpx;
+  top: -140rpx;
+  right: -90rpx;
+}
+
+.d2 {
+  width: 220rpx;
+  height: 220rpx;
+  bottom: -80rpx;
+  left: -70rpx;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.d3 {
+  width: 96rpx;
+  height: 96rpx;
+  top: 70rpx;
+  right: 130rpx;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---------- 游客态：品牌 ---------- */
+.brand {
+  text-align: center;
+}
+
+.brand-logo {
+  width: 136rpx;
+  height: 136rpx;
+  border-radius: 42rpx;
+  margin: 8rpx auto 26rpx;
+  background: rgba(255, 255, 255, 0.22);
+  border: 2rpx solid rgba(255, 255, 255, 0.36);
+  font-size: 64rpx;
+  line-height: 136rpx;
+  box-shadow: 0 12rpx 30rpx rgba(190, 40, 80, 0.22);
+}
+
+.brand-name {
+  font-size: 46rpx;
+  font-weight: 700;
+  letter-spacing: 6rpx;
+}
+
+.brand-slogan {
+  font-size: 24rpx;
+  opacity: 0.9;
+  margin-top: 14rpx;
+}
+
+.brand-cta {
+  margin-top: 40rpx;
+}
+
+.brand-note {
+  font-size: 21rpx;
+  opacity: 0.82;
+  margin-top: 18rpx;
+}
+
+/* ---------- 已登录：情侣卡片 ---------- */
+.avatar-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-box {
+  width: 132rpx;
+  height: 132rpx;
+  position: relative;
+}
+
+.avatar {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.95);
+  background: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(190, 50, 90, 0.28);
+}
+
+.placeholder {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-size: 28rpx;
+  font-weight: 600;
+  line-height: 132rpx;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.placeholder.partner {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.waiting {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  border: 4rpx dashed rgba(255, 255, 255, 0.85);
+  line-height: 132rpx;
+  font-size: 46rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.avatar-tag {
+  position: absolute;
+  bottom: -20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18rpx;
+  background: #fff;
+  color: #ff6b81;
+  padding: 3rpx 14rpx;
+  border-radius: 999rpx;
+  white-space: nowrap;
+  box-shadow: 0 4rpx 10rpx rgba(190, 50, 90, 0.2);
+}
+
+.heart {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20rpx;
+  animation: beat 1.9s ease-in-out infinite;
+}
+
+.heart-ico {
+  font-size: 34rpx;
+  line-height: 1;
+}
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  14% { transform: scale(1.16); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.1); }
+}
+
+.couple-names {
+  font-size: 33rpx;
+  font-weight: 600;
+  margin-top: 22rpx;
+  letter-spacing: 1rpx;
+}
+
+.nick-tip {
+  font-size: 23rpx;
+  margin-top: 18rpx;
+  opacity: 0.95;
+  text-decoration: underline;
+}
+
+/* 在一起计时：玻璃拟态面板 */
+.days-wrap {
+  margin-top: 30rpx;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2rpx solid rgba(255, 255, 255, 0.3);
+  border-radius: 30rpx;
+  padding: 28rpx 24rpx 24rpx;
+  backdrop-filter: blur(8rpx);
+}
+
+.days-label {
+  font-size: 23rpx;
+  opacity: 0.92;
+  letter-spacing: 2rpx;
+}
+
+.dur {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin: 10rpx 0 6rpx;
+}
+
+.dur-num {
+  font-size: 72rpx;
+  font-weight: 800;
+  line-height: 1;
+  text-shadow: 0 4rpx 14rpx rgba(180, 40, 80, 0.25);
+}
+
+.dur-unit {
+  font-size: 26rpx;
+  margin-left: 10rpx;
+  opacity: 0.95;
+}
+
+.dur-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18rpx;
+  margin-top: 12rpx;
+}
+
+.dur-clock {
+  font-size: 27rpx;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.95;
+}
+
+.dur-from {
+  font-size: 20rpx;
+  opacity: 0.8;
+}
+
+.days-set {
+  font-size: 26rpx;
+  text-decoration: underline;
+  margin-top: 12rpx;
+}
+
+.bind-hint {
+  font-size: 23rpx;
+  margin-top: 26rpx;
+  opacity: 0.92;
+  line-height: 1.6;
+}
+
+.invite-box {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2rpx dashed rgba(255, 255, 255, 0.55);
+  border-radius: 26rpx;
+  padding: 26rpx;
+  margin-top: 24rpx;
+}
+
+.invite-code {
+  font-size: 46rpx;
+  font-weight: 700;
+  letter-spacing: 10rpx;
+  font-variant-numeric: tabular-nums;
+}
+
+.invite-tip {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 22rpx;
+  margin-top: 10rpx;
+}
+
+/* Hero 按钮 */
+.hero-btn {
+  background: #fff;
+  color: #ff5c7a;
+  border-radius: 999rpx;
+  height: 84rpx;
+  line-height: 84rpx;
+  padding: 0 56rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  border: none;
+  margin: 0;
+  box-shadow: 0 8rpx 22rpx rgba(190, 40, 80, 0.22);
+}
+
+.hero-btn::after {
+  border: none;
+}
+
+.hero-btn.ghost {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border: 2rpx solid rgba(255, 255, 255, 0.6);
+  box-shadow: none;
+}
+
+.bind-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 28rpx;
+}
+
+.bind-actions .hero-btn {
+  flex: 1;
+  padding: 0;
+}
+
+/* ==================================================================
+   未绑定提示
+   ================================================================== */
+.lock-pill {
+  margin: 22rpx 24rpx 0;
+  background: #fff;
+  border-radius: 999rpx;
+  padding: 18rpx 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(255, 107, 129, 0.1);
+}
+
+.lp-ico {
+  margin-right: 10rpx;
+  font-size: 24rpx;
+}
+
+.lp-text {
+  font-size: 24rpx;
+  color: #888;
+}
+
+/* ==================================================================
+   今日天气
+   ================================================================== */
+.weather-card {
+  margin: 24rpx 24rpx 0;
+  background: linear-gradient(135deg, #e9f1ff 0%, #f5f9ff 55%, #fff 100%);
+  border: 2rpx solid rgba(120, 160, 230, 0.12);
+  box-shadow: 0 6rpx 20rpx rgba(120, 160, 230, 0.1);
+}
+
+.wx-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14rpx;
+}
+
+.wx-date {
+  font-size: 23rpx;
+  color: #8a9bb8;
+  font-weight: 500;
+}
+
+.wx-more {
+  font-size: 22rpx;
+  color: #a8b8ce;
+}
+
+.wx-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0;
+  font-size: 24rpx;
+  color: #8a9bb8;
+}
+
+.wx-spin {
+  width: 28rpx;
+  height: 28rpx;
+  border: 3rpx solid #d8e4f8;
+  border-top-color: #7ba3e8;
+  border-radius: 50%;
+  margin-right: 14rpx;
+  animation: wxSpin 0.8s linear infinite;
+}
+
+@keyframes wxSpin {
+  to { transform: rotate(360deg); }
+}
+
+.wx-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wx-left {
+  display: flex;
+  align-items: center;
+}
+
+.wx-icon {
+  width: 94rpx;
+  height: 94rpx;
+  border-radius: 30rpx;
+  background: rgba(255, 255, 255, 0.85);
+  font-size: 50rpx;
+  line-height: 94rpx;
+  text-align: center;
+  margin-right: 20rpx;
+  box-shadow: 0 4rpx 14rpx rgba(120, 160, 230, 0.14);
+}
+
+.wx-info {
+  min-width: 0;
+}
+
+.wx-temp {
+  font-size: 52rpx;
+  font-weight: 700;
+  color: #3d5a80;
+  line-height: 1;
+}
+
+.wx-text {
+  font-size: 23rpx;
+  color: #8a9bb8;
+  margin-top: 8rpx;
+}
+
+.wx-right {
+  text-align: right;
+  padding-left: 12rpx;
+}
+
+.wx-range {
+  font-size: 26rpx;
+  color: #6b7f9e;
+  font-weight: 600;
+}
+
+.wx-advice {
+  font-size: 21rpx;
+  color: #8a9bb8;
+  margin-top: 8rpx;
+  max-width: 280rpx;
+}
+
+.wx-extra {
+  font-size: 20rpx;
+  color: #a8b8ce;
+  margin-top: 6rpx;
+}
+
+.wx-error {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.wx-err-ico {
+  font-size: 34rpx;
+  margin-right: 12rpx;
+}
+
+.wx-err-text {
+  font-size: 23rpx;
+  color: #b08898;
+}
+
+/* ==================================================================
+   最近的纪念日
+   ================================================================== */
+.anniv-preview {
+  margin: 24rpx 24rpx 0;
+}
+
+/* 卡片标题统一：粉色小竖条 + 标题 */
+.card-title {
+  display: flex;
+  align-items: center;
+  font-size: 29rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 18rpx;
+}
+
+.card-title::before {
+  content: '';
+  width: 6rpx;
+  height: 26rpx;
+  background: linear-gradient(180deg, #ff9db2, #ff6b81);
+  border-radius: 3rpx;
+  margin-right: 12rpx;
+}
+
+.anniv-row {
+  display: flex;
+  align-items: center;
+}
+
+.anniv-emoji {
+  font-size: 46rpx;
+  margin-right: 18rpx;
+}
+
+.anniv-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.anniv-title {
+  font-size: 29rpx;
+  font-weight: 500;
+  margin-bottom: 6rpx;
+}
+
+.anniv-days {
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #ff6b81;
+  flex-shrink: 0;
+}
+
+.anniv-unit {
+  font-size: 22rpx;
+  margin-left: 4rpx;
+}
+
+/* ==================================================================
+   全部功能
+   ================================================================== */
+.section {
+  margin-top: 32rpx;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+  margin-bottom: 18rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.st-bar {
+  width: 6rpx;
+  height: 26rpx;
+  border-radius: 3rpx;
+  background: linear-gradient(180deg, #ff9db2, #ff6b81);
+  margin-right: 12rpx;
+}
+
+.section-sub {
+  font-size: 22rpx;
+  color: #aaa;
+  font-weight: 400;
+  margin-left: 14rpx;
+}
+
+/* ---------- 功能分组 ---------- */
+.fgroup {
+  margin-top: 26rpx;
+}
+
+.fg-title {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  color: #8a8a8a;
+  font-weight: 500;
+  letter-spacing: 1rpx;
+  padding: 0 24rpx;
+  margin-bottom: 12rpx;
+}
+
+.fg-title::before {
+  content: '';
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff9db2, #ff6b81);
+  margin-right: 10rpx;
+}
+
+/* 每行固定 3 条（33.33% 宽）——不论组里有几条，卡片尺寸完全一致。
+   组内 4 条时会自然多排一行，末尾单独一张。 */
+.fg-row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 16rpx;
+}
+
+.fcard {
+  width: 33.333%;
+  padding: 8rpx;
+  box-sizing: border-box;
+  display: flex;
+}
+
+/* 竖排小方块：圆形图标在上，名称与描述在下 */
+.fc-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 22rpx 10rpx 20rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 16rpx rgba(255, 107, 129, 0.07);
+}
+
+.fc-icon {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  align-self: center;
+  flex-shrink: 0;
+  margin-bottom: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.fc-emoji {
+  font-size: 36rpx;
+  line-height: 1;
+}
+
+.fc-name {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.25;
+}
+
+.fc-desc {
+  font-size: 19rpx;
+  color: #a8a8a8;
+  margin-top: 6rpx;
+  line-height: 1.3;
+}
+
+/* 角标挂在图标右上角，像一颗小红点 */
+.badge {
+  position: absolute;
+  top: -4rpx;
+  right: -6rpx;
+  min-width: 30rpx;
+  height: 30rpx;
+  line-height: 30rpx;
+  padding: 0 8rpx;
+  background: #ff3b30;
+  color: #fff;
+  border-radius: 999rpx;
+  font-size: 19rpx;
+  box-sizing: border-box;
+  box-shadow: 0 2rpx 8rpx rgba(255, 59, 48, 0.35);
+}
