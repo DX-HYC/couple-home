@@ -1,0 +1,131 @@
+<view class="page">
+  <!-- 今日概览 -->
+  <view class="today-card" wx:if="{{todayList.length}}">
+    <view class="today-head">
+      <text class="today-title">今天</text>
+      <text class="today-count">{{todayList.length}} 项安排</text>
+    </view>
+    <view class="today-item" wx:for="{{todayList}}" wx:key="id">
+      <view class="td-time">
+        <text class="td-hhmm">{{item._clock}}</text>
+        <text class="td-remain" wx:if="{{!item.is_done}}">{{item._remain}}</text>
+        <text class="td-remain done" wx:else>已完成</text>
+      </view>
+      <view class="td-body">
+        <view class="td-title">{{item.title}}</view>
+        <view class="td-meta">
+          <text class="tag t-{{item.priority}}">{{item._priorityLabel}}</text>
+          <text class="tag t-cat">{{item.category}}</text>
+        </view>
+        <view class="td-note" wx:if="{{item.note}}">{{item.note}}</view>
+      </view>
+      <view class="td-check" bindtap="toggleDone" data-id="{{item.id}}">
+        <text class="check-ico">{{item.is_done ? '✅' : '⭕'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="card empty" wx:if="{{!loading && !list.length}}">
+    <view class="empty-ico">📅</view>
+    <view class="empty-title">还没有日程</view>
+    <view class="empty-sub">把约会、纪念日、要做的事记下来，到点提醒你们</view>
+    <button class="primary-btn" bindtap="openForm" data-id="">+ 添加第一个日程</button>
+  </view>
+
+  <!-- 列表 -->
+  <view class="card" wx:if="{{list.length}}">
+    <view class="card-title">全部日程</view>
+    <view class="sch-row {{item.is_done ? 'done' : ''}}" wx:for="{{list}}" wx:key="id">
+      <view class="sch-check" bindtap="toggleDone" data-id="{{item.id}}">
+        <text class="check-ico">{{item.is_done ? '✅' : '⭕'}}</text>
+      </view>
+      <view class="sch-body">
+        <view class="sch-title">{{item.title}}</view>
+        <view class="sch-when">
+          <text class="sch-date">{{item._when}}</text>
+          <text class="tag t-{{item.priority}}">{{item._priorityLabel}}</text>
+          <text class="tag t-cat">{{item.category}}</text>
+          <text class="tag t-rep" wx:if="{{item._repeatLabel}}">{{item._repeatLabel}}</text>
+        </view>
+        <view class="sch-note" wx:if="{{item.note}}">{{item.note}}</view>
+        <view class="sch-owner muted">{{item.owner_name}} 创建</view>
+      </view>
+      <view class="sch-acts">
+        <text class="act" bindtap="openForm" data-id="{{item.id}}">编辑</text>
+        <text class="act danger" bindtap="del" data-id="{{item.id}}">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="fab" bindtap="openForm" data-id="">＋</button>
+
+  <!-- 编辑表单 -->
+  <view class="mask" wx:if="{{showForm}}" bindtap="closeForm"></view>
+  <view class="sheet" wx:if="{{showForm}}">
+    <view class="sheet-head">
+      <text class="sheet-title">{{editingId ? '编辑日程' : '新日程'}}</text>
+      <text class="sheet-close" bindtap="closeForm">✕</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">标题</text>
+      <input class="form-input" value="{{form.title}}" placeholder="比如：一起看电影"
+             placeholder-class="ph" bindinput="onTitle" maxlength="40" />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">日期</text>
+      <picker mode="date" start="2020-01-01" end="2035-12-31" value="{{form.event_date}}" bindchange="onDate">
+        <view class="form-picker">{{form.event_date || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">时间</text>
+      <picker mode="time" value="{{form.event_time}}" bindchange="onTime">
+        <view class="form-picker">{{form.event_time}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">分类</text>
+      <view class="chips">
+        <view class="chip {{form.category === item ? 'sel' : ''}}" wx:for="{{categories}}" wx:key="*this"
+              data-cat="{{item}}" bindtap="onCategory">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">重要程度</text>
+      <view class="chips">
+        <view class="chip {{form.priority === item.key ? 'sel' : ''}}" wx:for="{{priorityList}}" wx:key="key"
+              data-pri="{{item.key}}" bindtap="onPriority">{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">重复</text>
+      <view class="chips">
+        <view class="chip {{form.repeat_rule === item.key ? 'sel' : ''}}" wx:for="{{repeatList}}" wx:key="key"
+              data-rep="{{item.key}}" bindtap="onRepeat">{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">提前提醒</text>
+      <view class="chips">
+        <view class="chip {{form.remind_before === item.value ? 'sel' : ''}}" wx:for="{{remindList}}" wx:key="value"
+              data-rem="{{item.value}}" bindtap="onRemind">{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">备注</text>
+      <textarea class="form-input area" value="{{form.note}}" placeholder="想说的话、要带的东西…"
+                placeholder-class="ph" bindinput="onNote" maxlength="100" />
+    </view>
+
+    <button class="primary-btn" bindtap="submit">{{editingId ? '保存' : '添加'}}</button>
+  </view>
+</view>
