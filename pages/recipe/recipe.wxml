@@ -1,0 +1,151 @@
+<view class="page">
+  <!-- 我点的菜 -->
+  <view class="card" wx:if="{{orders.length}}">
+    <view class="card-title">我们的菜单</view>
+    <view class="order-row" wx:for="{{orders}}" wx:key="id">
+      <view class="order-info">
+        <view class="order-dish">
+          {{item.dish_name}}
+          <text class="order-status" wx:if="{{item.status === 'done'}}">已做好</text>
+          <text class="order-status pending" wx:else>待做</text>
+        </view>
+        <view class="muted">{{item.owner_name}} 点的 · {{item._time}}</view>
+        <view class="order-note" wx:if="{{item.note}}">{{item.note}}</view>
+      </view>
+      <view class="order-actions">
+        <text class="oa" wx:if="{{item.status !== 'done'}}" bindtap="finishOrder" data-id="{{item.id}}">做好</text>
+        <text class="oa danger" bindtap="delOrder" data-id="{{item.id}}">删除</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索与分类 -->
+  <view class="search-bar">
+    <input class="search-input" value="{{keyword}}" bindinput="onSearch" placeholder="搜索菜名" placeholder-class="ph" />
+    <view class="count-tip" wx:if="{{totalCount}}">{{totalCount}} 道</view>
+  </view>
+
+  <scroll-view class="cat-bar" scroll-x enable-flex>
+    <text wx:for="{{categories}}" wx:key="*this"
+          class="cat {{activeCat === item ? 'active' : ''}}" bindtap="onCat" data-cat="{{item}}">{{item}}</text>
+  </scroll-view>
+
+  <view class="add-row">
+    <text class="add-hint">没找到想吃的？添加你们的小菜谱</text>
+    <button class="add-btn" bindtap="openAddForm">＋ 添加</button>
+  </view>
+
+  <view wx:if="{{!filtered.length}}" class="empty">
+    <view style="font-size:80rpx;margin-bottom:20rpx;">🍳</view>
+    <view>没有找到相关菜谱</view>
+  </view>
+
+  <view class="recipe-card" wx:for="{{filtered}}" wx:key="id" bindtap="openDetail" data-id="{{item.id}}">
+    <view class="rc-emoji">{{item.emoji}}</view>
+    <view class="rc-info">
+      <view class="rc-name">{{item.name}}<text class="rc-tag" wx:if="{{item._custom}}">我加的</text></view>
+      <view class="muted rc-meta">{{item.category}} · {{item.taste}} · {{item.duration}}分钟 · {{item.servings}}人份</view>
+      <view class="rc-ing" wx:if="{{item._ingSummary}}">食材：{{item._ingSummary}}</view>
+    </view>
+    <view class="rc-order" catchtap="order" data-id="{{item.id}}">点它</view>
+  </view>
+
+  <!-- 分页提示 -->
+  <view class="list-foot" wx:if="{{filtered.length}}">
+    <text wx:if="{{hasMore}}">上拉加载更多…</text>
+    <text wx:else>—— 到底啦，共 {{totalCount}} 道 ——</text>
+  </view>
+
+  <!-- 菜谱来源标注 -->
+  <view class="source-note">内置菜谱来自开源项目 HowToCook（The Unlicense）</view>
+
+  <!-- 菜谱详情 -->
+  <view class="mask" wx:if="{{showDetail}}" bindtap="closeDetail">
+    <view class="sheet" catchtap="noop">
+      <view class="detail-head">
+        <text class="d-emoji">{{detail.emoji}}</text>
+        <view>
+          <view class="d-name">{{detail.name}}</view>
+          <view class="muted">{{detail.category}} · {{detail.taste}} · 约{{detail.duration}}分钟 · {{detail.servings}}人份</view>
+        </view>
+      </view>
+
+      <view class="d-section" wx:if="{{detail._ingredients.length}}">
+        <view class="d-title">🧺 需要准备</view>
+        <view class="ing-grid">
+          <view class="ing" wx:for="{{detail._ingredients}}" wx:key="*this">{{item}}</view>
+        </view>
+      </view>
+
+      <view class="d-section" wx:if="{{detail._steps.length}}">
+        <view class="d-title">👩‍🍳 做法</view>
+        <view class="step" wx:for="{{detail._steps}}" wx:key="*this">
+          <text class="step-num">{{index + 1}}</text>
+          <text class="step-text">{{item}}</text>
+        </view>
+      </view>
+
+      <view class="d-section" wx:if="{{detail.tips}}">
+        <view class="d-title">💡 小贴士</view>
+        <view class="tips">{{detail.tips}}</view>
+      </view>
+
+      <button class="like-btn {{detail._liked ? 'liked' : ''}}" catchtap="toggleLike" data-id="{{detail.id}}">{{detail._liked ? '❤️ 已喜欢' : '🤍 我喜欢吃'}}</button>
+      <button class="primary-btn" catchtap="order" data-id="{{detail.id}}">点这道菜给 TA</button>
+      <button class="ghost-btn danger-btn" wx:if="{{detail._custom}}" catchtap="delCustom" data-id="{{detail._cid}}">删除这道菜</button>
+      <button class="ghost-btn close-btn" bindtap="closeDetail">关闭</button>
+    </view>
+  </view>
+
+  <!-- 添加菜谱表单 -->
+  <view class="mask" wx:if="{{showAddForm}}" bindtap="closeAddForm"></view>
+  <view class="sheet" wx:if="{{showAddForm}}">
+    <view class="sheet-head">
+      <text class="sheet-title">添加我们的菜谱</text>
+      <text class="sheet-close" bindtap="closeAddForm">✕</text>
+    </view>
+    <view class="form-row">
+      <text class="form-label">菜名</text>
+      <input class="form-input" value="{{addForm.name}}" placeholder="比如：番茄炒蛋" placeholder-class="ph" bindinput="onAdd" data-field="name" maxlength="20" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">图标</text>
+      <input class="form-input" value="{{addForm.emoji}}" placeholder="🍲" placeholder-class="ph" bindinput="onAdd" data-field="emoji" maxlength="2" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">分类</text>
+      <view class="chips">
+        <view class="chip {{addForm.category === item ? 'sel' : ''}}" wx:for="{{addCats}}" wx:key="*this" data-cat="{{item}}" bindtap="onAddCat">{{item}}</view>
+      </view>
+    </view>
+    <view class="form-row">
+      <text class="form-label">口味</text>
+      <view class="chips">
+        <view class="chip {{addForm.taste === item ? 'sel' : ''}}" wx:for="{{addTastes}}" wx:key="*this" data-taste="{{item}}" bindtap="onAddTaste">{{item}}</view>
+      </view>
+    </view>
+    <view class="form-row row2">
+      <view class="half">
+        <text class="form-label">时长(分)</text>
+        <input class="form-input" type="number" value="{{addForm.duration}}" placeholder="15" placeholder-class="ph" bindinput="onAdd" data-field="duration" />
+      </view>
+      <view class="half">
+        <text class="form-label">人份</text>
+        <input class="form-input" type="number" value="{{addForm.servings}}" placeholder="2" placeholder-class="ph" bindinput="onAdd" data-field="servings" />
+      </view>
+    </view>
+    <view class="form-row">
+      <text class="form-label">食材（每行一个）</text>
+      <textarea class="form-input area" value="{{addForm.ingredients}}" placeholder="鸡蛋、西红柿、葱" placeholder-class="ph" bindinput="onAdd" data-field="ingredients" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">做法（每行一步）</text>
+      <textarea class="form-input area" value="{{addForm.steps}}" placeholder="鸡蛋打散炒熟；西红柿炒出汁；混合翻炒" placeholder-class="ph" bindinput="onAdd" data-field="steps" />
+    </view>
+    <view class="form-row">
+      <text class="form-label">小贴士</text>
+      <input class="form-input" value="{{addForm.tips}}" placeholder="可选" placeholder-class="ph" bindinput="onAdd" data-field="tips" maxlength="60" />
+    </view>
+    <button class="primary-btn" bindtap="submitAdd">保存菜谱</button>
+  </view>
+</view>
