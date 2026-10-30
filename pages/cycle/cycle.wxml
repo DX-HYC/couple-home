@@ -1,0 +1,178 @@
+<view class="page">
+  <!-- 预测主卡片 -->
+  <view class="pred-card" wx:if="{{pred}}">
+    <view class="pred-bg"></view>
+    <view class="pred-inner">
+      <view class="pred-phase">
+        <text class="phase-badge p-{{pred.phase}}">{{phaseText}}</text>
+      </view>
+
+      <view class="pred-main">
+        <view class="pred-num">{{pred.daysToNext}}</view>
+        <view class="pred-unit">天后</view>
+      </view>
+      <view class="pred-date">预计 {{pred._nextText}} 来</view>
+
+      <!-- 学习进度 -->
+      <view class="learn-box">
+        <view class="learn-head">
+          <text class="learn-title">🧠 自主学习</text>
+          <text class="learn-conf">{{confidenceText}}</text>
+        </view>
+        <view class="learn-row">
+          <view class="learn-item">
+            <text class="lv">{{pred.cycle}} 天</text>
+            <text class="lk">学习到的周期</text>
+          </view>
+          <view class="learn-item">
+            <text class="lv">{{pred.gapCount}} 次</text>
+            <text class="lk">已学习样本</text>
+          </view>
+          <view class="learn-item">
+            <text class="lv">{{pred.cycleCount}} 次</text>
+            <text class="lk">累计记录</text>
+          </view>
+        </view>
+        <view class="learn-bar">
+          <view class="learn-fill" style="width: {{confidencePct}}%"></view>
+        </view>
+        <view class="learn-note" wx:if="{{pred.learned.trendApplied}}">
+          📈 检测到周期{{trendWord}}趋势，已自动调整预测
+        </view>
+        <view class="learn-note" wx:elif="{{pred.learned.source === 'user'}}">
+          记录够 2 次以上就能开始自己学，越多越准
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 温馨提醒 -->
+  <view class="card tip-card" wx:if="{{tips.length}}">
+    <view class="card-title">温馨提醒</view>
+    <view class="tip-item" wx:for="{{tips}}" wx:key="*this">
+      <text class="tip-dot"></text>
+      <text class="tip-text">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 关键日期 -->
+  <view class="card" wx:if="{{pred}}">
+    <view class="card-title">关键日期</view>
+    <view class="kd-grid">
+      <view class="kd-item">
+        <view class="kd-label">下次开始</view>
+        <view class="kd-val main">{{pred._nextText}}</view>
+      </view>
+      <view class="kd-item">
+        <view class="kd-label">排卵日</view>
+        <view class="kd-val">{{pred._ovuText}}</view>
+      </view>
+      <view class="kd-item">
+        <view class="kd-label">易孕期</view>
+        <view class="kd-val">{{pred._fertileText}}</view>
+      </view>
+      <view class="kd-item">
+        <view class="kd-label">上次开始</view>
+        <view class="kd-val">{{pred._lastText}}</view>
+      </view>
+    </view>
+    <view class="kd-hint">易孕期仅供参考，不作为避孕或备孕依据</view>
+  </view>
+
+  <!-- 记录列表 -->
+  <view class="card" wx:if="{{list.length}}">
+    <view class="card-title">历史记录</view>
+    <view class="rec-row" wx:for="{{list}}" wx:key="id">
+      <view class="rec-date">
+        <text class="rec-m">{{item._m}}</text>
+        <text class="rec-d">{{item._d}}</text>
+      </view>
+      <view class="rec-body">
+        <view class="rec-line">
+          <text class="rec-flow f-{{item.flow || 'none'}}">{{item._flowLabel}}</text>
+          <text class="rec-len" wx:if="{{item._len}}">持续 {{item._len}} 天</text>
+          <text class="rec-gap" wx:if="{{item._gap}}">距上次 {{item._gap}} 天</text>
+        </view>
+        <view class="rec-sym" wx:if="{{item.symptom}}">{{item.symptom}}</view>
+        <view class="rec-note" wx:if="{{item.note}}">{{item.note}}</view>
+      </view>
+      <view class="rec-acts">
+        <text class="ract" bindtap="openForm" data-id="{{item.id}}">改</text>
+        <text class="ract danger" bindtap="del" data-id="{{item.id}}">删</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="card empty" wx:if="{{!loading && !list.length}}">
+    <view class="empty-ico">🌸</view>
+    <view class="empty-title">开始记录</view>
+    <view class="empty-sub">记录 2 次以上，就能自动学会她的规律
+预测会随着记录越来越准</view>
+    <button class="primary-btn" bindtap="openForm" data-id="">+ 记录一次</button>
+  </view>
+
+  <button class="fab" bindtap="openForm" data-id="">＋</button>
+
+  <!-- 表单 -->
+  <view class="mask" wx:if="{{showForm}}" bindtap="closeForm"></view>
+  <view class="sheet" wx:if="{{showForm}}">
+    <view class="sheet-head">
+      <text class="sheet-title">{{editingId ? '编辑记录' : '记一次'}}</text>
+      <text class="sheet-close" bindtap="closeForm">✕</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">开始日期</text>
+      <picker mode="date" start="2020-01-01" end="2035-12-31" value="{{form.start_date}}" bindchange="onStart">
+        <view class="form-picker">{{form.start_date || '选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">结束日期（可选）</text>
+      <picker mode="date" start="2020-01-01" end="2035-12-31" value="{{form.end_date}}" bindchange="onEnd">
+        <view class="form-picker">{{form.end_date || '还没结束'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">经期天数</text>
+      <view class="chips">
+        <view class="chip {{form.period_length === item ? 'sel' : ''}}" wx:for="{{periodOpts}}" wx:key="*this"
+              data-pl="{{item}}" bindtap="onPeriodLen">{{item}} 天</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">周期天数</text>
+      <view class="chips">
+        <view class="chip {{form.cycle_length === item ? 'sel' : ''}}" wx:for="{{cycleOpts}}" wx:key="*this"
+              data-cl="{{item}}" bindtap="onCycleLen">{{item}} 天</view>
+      </view>
+      <view class="form-tip">记过 2 次以后，系统会自己学，这里只是初始估计</view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">流量</text>
+      <view class="chips">
+        <view class="chip {{form.flow === item.key ? 'sel' : ''}}" wx:for="{{flowOpts}}" wx:key="key"
+              data-flow="{{item.key}}" bindtap="onFlow">{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">身体感受</text>
+      <input class="form-input" value="{{form.symptom}}" placeholder="比如：肚子胀、腰酸、头疼"
+             placeholder-class="ph" bindinput="onSymptom" maxlength="40" />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">备注</text>
+      <textarea class="form-input area" value="{{form.note}}" placeholder="想记下来的都行"
+                placeholder-class="ph" bindinput="onNote" maxlength="120" />
+    </view>
+
+    <button class="primary-btn" bindtap="submit">{{editingId ? '保存' : '记下'}}</button>
+  </view>
+</view>
