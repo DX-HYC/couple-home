@@ -1,0 +1,176 @@
+<view class="page">
+  <!-- ============ 顶部 Hero ============ -->
+  <view class="hero">
+    <view class="deco d1"></view>
+    <view class="deco d2"></view>
+    <view class="deco d3"></view>
+
+    <view class="hero-inner">
+      <!-- 会话恢复中：骨架占位。
+           下面���天气与功能区不依赖登录，已经在画了，这里不阻塞首屏。 -->
+      <block wx:if="{{loading}}">
+        <view class="sk-row">
+          <view class="sk-circle"></view>
+          <view class="sk-heart"></view>
+          <view class="sk-circle"></view>
+        </view>
+        <view class="sk-bar"></view>
+      </block>
+
+      <!-- 游客态：品牌 + 登录引导（先逛后登录，审核合规） -->
+      <block wx:elif="{{!loggedIn}}">
+        <view class="brand">
+          <view class="brand-logo">💑</view>
+          <view class="brand-name">情侣小屋</view>
+          <view class="brand-slogan">两个人的小日子，都在这儿记着</view>
+        </view>
+        <view class="brand-cta">
+          <button class="hero-btn" bindtap="onLogin">一键登录</button>
+          <view class="brand-note">登录后即可和 TA 一起记录你们的点滴</view>
+        </view>
+      </block>
+
+        <!-- 已登录：情侣卡片 -->
+        <block wx:else>
+          <view class="avatar-row">
+            <view class="avatar-box" bindtap="goMine">
+              <image wx:if="{{myAvatar}}" class="avatar" src="{{myAvatar}}" mode="aspectFill" />
+              <view wx:else class="avatar placeholder">{{myInitial}}</view>
+              <view class="avatar-tag" wx:if="{{needsNickname}}">点我设置</view>
+            </view>
+            <view class="heart"><text class="heart-ico">💗</text></view>
+            <view class="avatar-box" wx:if="{{coupled}}">
+              <image wx:if="{{partnerAvatar}}" class="avatar" src="{{partnerAvatar}}" mode="aspectFill" />
+              <view wx:else class="avatar placeholder partner">{{partnerInitial}}</view>
+            </view>
+            <view class="avatar-box waiting" wx:else>?</view>
+          </view>
+
+          <view class="couple-names" wx:if="{{coupled && partnerNamed}}">{{greetingText}}，{{myName || '我'}} &amp; {{partnerName}}</view>
+          <view class="couple-names" wx:elif="{{coupled}}">{{greetingText}}，{{myName || '我'}} &amp; 对方</view>
+          <view class="couple-names" wx:else>{{greetingText}}，{{myName || '你'}} · 等待绑定</view>
+
+          <view class="nick-tip" wx:if="{{needsNickname}}" bindtap="goMine">还没设置昵称，点这里告诉对方你是谁 ›</view>
+
+          <!-- 在一起计时：玻璃拟态面板 -->
+          <view class="days-wrap" wx:if="{{coupled && durHasValue}}" bindtap="goRelationSetting">
+            <view class="days-label">我们已经在一起</view>
+            <view class="dur">
+              <text class="dur-num">{{durDays}}</text>
+              <text class="dur-unit">天</text>
+            </view>
+            <view class="dur-foot">
+              <text class="dur-clock">{{durHours}}:{{durMinutes}}:{{durSeconds}}</text>
+              <text class="dur-from" wx:if="{{relationStartText}}">从 {{relationStartText}} 开始</text>
+            </view>
+          </view>
+
+          <view class="days-wrap" wx:elif="{{coupled}}" bindtap="goRelationSetting">
+            <view class="days-label">还没有设置在一起的日子</view>
+            <view class="days-set">点这里设置 ›</view>
+          </view>
+
+          <view class="bind-hint" wx:if="{{!coupled}}">还差一个人 —— 生成邀请码发给 TA，或者直接把小程序分享过去</view>
+
+          <view class="invite-box" wx:if="{{!coupled && inviteCode}}">
+            <view class="invite-code">{{inviteCode}}</view>
+            <view class="invite-tip">让 TA 在「绑定情侣」页输入这个邀请码</view>
+          </view>
+
+          <view class="bind-actions" wx:if="{{!coupled}}">
+            <button class="hero-btn" bindtap="goBind">{{inviteCode ? '邀请码已生成' : '生成邀请码'}}</button>
+            <button class="hero-btn ghost" open-type="share">分享给 TA</button>
+          </view>
+        </block>
+      </view>
+    </view>
+
+  <!-- 未绑定提示 -->
+  <view class="lock-pill" wx:if="{{loggedIn && !coupled}}">
+    <text class="lp-ico">🔒</text>
+    <text class="lp-text">绑定情侣后解锁全部功能</text>
+  </view>
+
+  <!-- ============ 今日天气 ============ -->
+  <view class="card weather-card" bindtap="goFeature" data-key="weather">
+    <view class="wx-head">
+      <text class="wx-date">{{todayText}}</text>
+      <text class="wx-more">今日天气 ›</text>
+    </view>
+    <block wx:if="{{weatherLoading && !weather}}">
+      <view class="wx-loading">
+        <view class="wx-spin"></view>
+        <text>看看今天什么天…</text>
+      </view>
+    </block>
+    <block wx:elif="{{weather}}">
+      <view class="wx-main">
+        <view class="wx-left">
+          <view class="wx-icon">{{weather.icon}}</view>
+          <view class="wx-info">
+            <view class="wx-temp">{{weather.temp}}°</view>
+            <view class="wx-text">{{weather.text}}</view>
+          </view>
+        </view>
+        <view class="wx-right">
+          <view class="wx-range">{{weather.low}}° ~ {{weather.high}}°</view>
+          <view class="wx-advice">{{weatherAdvice}}</view>
+          <view class="wx-extra" wx:if="{{weather.windLevel}}">{{weather.windLevel}} · 湿度 {{weather.humidity}}%</view>
+        </view>
+      </view>
+    </block>
+    <block wx:elif="{{weatherError}}">
+      <view class="wx-error">
+        <text class="wx-err-ico">🌧</text>
+        <text class="wx-err-text">{{weatherError}}</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- ============ 最近的纪念日 ============ -->
+  <view class="card anniv-preview" wx:if="{{coupled}}" bindtap="goFeature" data-key="anniversary">
+    <view class="card-title">最近的纪念日</view>
+    <block wx:if="{{nextAnniversary}}">
+      <view class="anniv-row">
+        <text class="anniv-emoji">{{nextAnniversary.emoji}}</text>
+        <view class="anniv-info">
+          <view class="anniv-title">{{nextAnniversary.title}}</view>
+          <view class="muted">
+            {{nextAnniversary.calendar_type === 'lunar' ? '农历' : '阳历'}}{{nextAnniversary.month}}月{{nextAnniversary.day}}日
+            · {{nextAnniversary._countdown.targetText}}
+          </view>
+        </view>
+        <view class="anniv-days" wx:if="{{nextAnniversary._countdown.isToday}}">今天</view>
+        <view class="anniv-days" wx:else>{{nextAnniversary._countdown.days}}<text class="anniv-unit">天</text></view>
+      </view>
+    </block>
+    <view class="muted" wx:else>还没有纪念日，去添加一个吧</view>
+  </view>
+
+  <!-- ============ 全部功能（按类别分组） ============ -->
+  <view class="section">
+    <view class="section-title">
+      <text class="st-bar"></text>
+      <text>全部功能</text>
+      <text class="section-sub">共 {{featureCount}} 项</text>
+    </view>
+
+    <view class="fgroup" wx:for="{{featureGroups}}" wx:key="title" wx:for-item="group">
+      <view class="fg-title">{{group.title}}</view>
+      <view class="fg-row">
+        <view class="fcard" wx:for="{{group.items}}" wx:key="key"
+              bindtap="goFeature" data-key="{{item.key}}">
+          <view class="fc-inner">
+            <view class="fc-icon" style="background: {{item.tint}}">
+              <text class="fc-emoji">{{item.emoji}}</text>
+              <view class="badge" wx:if="{{item.key === 'recipe' && pendingOrders > 0}}">{{pendingOrders}}</view>
+              <view class="badge" wx:if="{{item.key === 'anniversary' && unreadReminders > 0}}">{{unreadReminders}}</view>
+            </view>
+            <view class="fc-name">{{item.name}}</view>
+            <view class="fc-desc">{{item.desc}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
