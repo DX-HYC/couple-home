@@ -1,0 +1,77 @@
+<view class="page">
+  <view wx:if="{{permissionHint}}" class="hint">
+    <text class="hint-text">{{permissionHint}}</text>
+    <text class="hint-act" catchtap="onHintTap">{{failCount > 1 ? '重试' : '去设置'}}</text>
+  </view>
+
+  <!-- 我的位置 -->
+  <view class="card">
+    <view class="card-title">我的位置</view>
+    <block wx:if="{{myLocation}}">
+      <view class="loc-row" bindtap="openMap"
+            data-lat="{{myLocation.latitude}}" data-lng="{{myLocation.longitude}}"
+            data-name="{{myLocation.address}}" data-addr="{{myLocation.address}}">
+        <text class="loc-emoji">📍</text>
+        <view class="loc-info">
+          <view class="loc-text {{myHasText ? '' : 'pending'}}">{{myPlace}}</view>
+          <view class="bar">
+            <text class="bar-text" wx:if="{{watching}}">● 正在共享</text>
+            <text class="bar-text off" wx:else>已暂停</text>
+            <text class="bar-sync">{{lastSync}} 更新</text>
+          </view>
+        </view>
+        <text class="loc-open">地图 ›</text>
+      </view>
+
+      <view class="place-tip" wx:if="{{myHasText && myManual}}" bindtap="clearManual">
+        你手动标注了这个地点，<text class="link">点这里恢复自动识别</text>
+      </view>
+      <view class="place-tip" wx:if="{{!myHasText}}" bindtap="annotatePlace">
+        当前只有经纬度，<text class="link">点这里标注地名</text>，TA 才看得懂
+      </view>
+      <view class="place-tip" wx:elif="{{!geoReady}}">
+        未配置地图 key，地名无法自动识别；配置后打开 <text class="link">utils/geo.js</text> 填入 key
+      </view>
+    </block>
+    <view class="muted" wx:else>正在获取位置…</view>
+
+    <view class="bar-actions">
+      <text class="mini-btn" bindtap="refresh">立即刷新</text>
+      <text class="mini-btn plain" bindtap="annotatePlace">换个地点标注</text>
+    </view>
+  </view>
+
+  <!-- 距离 -->
+  <view class="card distance-card" wx:if="{{distanceText}}">
+    <view class="distance-num">{{distanceText}}</view>
+    <view class="muted">你们之间就隔着这么远</view>
+  </view>
+
+  <!-- 对方位置 -->
+  <view class="card">
+    <view class="card-title">{{partnerName}} 的位置</view>
+    <block wx:if="{{partnerLocation}}">
+      <view class="loc-row" bindtap="openMap"
+            data-lat="{{partnerLocation.latitude}}" data-lng="{{partnerLocation.longitude}}"
+            data-name="{{partnerLocation.address}}" data-addr="{{partnerLocation.address}}">
+        <text class="loc-emoji">💗</text>
+        <view class="loc-info">
+          <view class="loc-text {{partnerHasText ? '' : 'pending'}}">{{partnerPlace}}</view>
+          <view class="bar">
+            <text class="bar-sync" wx:if="{{partnerUpdated}}">{{partnerUpdated}}更新</text>
+            <text class="bar-sync" wx:else>位置未更新</text>
+          </view>
+        </view>
+        <text class="loc-open">地图 ›</text>
+      </view>
+      <view class="place-tip" wx:if="{{!partnerHasText}}">
+        {{partnerName}} 的位置还没有地名，TA 打开位置页后会自动识别
+      </view>
+    </block>
+    <view class="empty-sm" wx:else>{{partnerName}} 还没打开位置页面，TA 打开后你就能看到</view>
+  </view>
+
+  <view class="privacy">
+    位置只有你和伴侣能看到。微信定位本身只提供经纬度，标注地名后对方才能看懂你在哪；退出本页会停止共享。
+  </view>
+</view>
