@@ -1,0 +1,34 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/bind/bind",
+    "pages/anniversary/anniversary",
+    "pages/diary/diary",
+    "pages/album/album",
+    "pages/location/location",
+    "pages/recipe/recipe",
+    "pages/mine/mine",
+    "pages/weather/weather",
+    "pages/schedule/schedule",
+    "pages/preference/preference",
+    "pages/cycle/cycle",
+    "pages/wish/wish"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ff6b81",
+    "navigationBarTitleText": "情侣小屋",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#fff5f7"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于展示你和伴侣的实时位置距离，以及给日记标记地点"
+    }
+  },
+  "requiredPrivateInfos": [
+    "getLocation",
+    "chooseLocation"
+  ],
+  "sitemapLocation": "sitemap.json"
+}
