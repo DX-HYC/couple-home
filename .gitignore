@@ -1,0 +1,19 @@
+node_modules/
+
+# 微信开发者工具「构建 npm」的产物，本地生成，不要提交
+miniprogram_npm/
+
+# 开发者工具本地配置，含个人路径
+project.private.config.json
+
+# 服务端运行时文件（含 access_token，绝不能提交）
+server/config.local.php
+server/queue.json
+server/token_cache.json
+server/log.txt
+server/*.tmp
+
+# 小程序配置里的 AppSecret / LBS key 属敏感信息
+# 若使用 git，请把 utils/cloud.js 与 utils/remote.config.js 改为从环境读取
+.env
+.env.local
