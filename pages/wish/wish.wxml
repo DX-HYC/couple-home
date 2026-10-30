@@ -1,0 +1,121 @@
+<view class="page">
+  <!-- 统计条 -->
+  <view class="stat-bar" wx:if="{{stats.totalCount}}">
+    <view class="stat-item">
+      <view class="stat-num">{{stats.openCount}}</view>
+      <view class="stat-label">待实现</view>
+    </view>
+    <view class="stat-sep"></view>
+    <view class="stat-item">
+      <view class="stat-num">{{stats.doneCount}}</view>
+      <view class="stat-label">已实现</view>
+    </view>
+    <view class="stat-sep"></view>
+    <view class="stat-item">
+      <view class="stat-num">{{stats.partnerOpen}}</view>
+      <view class="stat-label">TA 的</view>
+    </view>
+  </view>
+
+  <!-- 未绑定情侣 -->
+  <view class="card empty" wx:if="{{!coupled}}">
+    <view class="empty-ico">🔒</view>
+    <view class="empty-title">还没绑定情侣</view>
+    <view class="empty-sub">愿望清单是两个人一起用的
+邀请 TA 绑定后，就能互相写心愿啦</view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="card empty" wx:elif="{{!loading && !stats.totalCount}}">
+    <view class="empty-ico">✨</view>
+    <view class="empty-title">还没有愿望</view>
+    <view class="empty-sub">写下你的心愿，TA 会收到通知
+也能顺手把 TA 的小心愿实现掉</view>
+    <button class="primary-btn" bindtap="openForm">+ 许个愿望</button>
+  </view>
+
+  <!-- 待实现 -->
+  <view class="card" wx:if="{{openList.length}}">
+    <view class="card-title">待实现</view>
+    <view class="wish-row" wx:for="{{openList}}" wx:key="id">
+      <view class="check" bindtap="toggleDone" data-id="{{item.id}}">◯</view>
+      <view class="wish-body">
+        <view class="wish-title"><text class="w-emoji">{{item.emoji}}</text>{{item.title}}</view>
+        <view class="wish-detail" wx:if="{{item.detail}}">{{item.detail}}</view>
+        <view class="wish-meta">
+          <text class="w-tag {{item.mine ? 'mine' : ''}}">{{item.ownerText}}</text>
+          <text class="w-date" wx:if="{{item.targetText}}">{{item.targetText}}</text>
+        </view>
+      </view>
+      <view class="wish-acts">
+        <text class="pact" wx:if="{{item.mine}}" bindtap="openForm" data-id="{{item.id}}">改</text>
+        <text class="pact danger" wx:if="{{item.mine}}" bindtap="del" data-id="{{item.id}}">删</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 已实现 -->
+  <view class="card" wx:if="{{doneList.length}}">
+    <view class="card-title">已实现</view>
+    <view class="wish-row done" wx:for="{{doneList}}" wx:key="id">
+      <view class="check checked" bindtap="toggleDone" data-id="{{item.id}}">✓</view>
+      <view class="wish-body">
+        <view class="wish-title"><text class="w-emoji">{{item.emoji}}</text>{{item.title}}</view>
+        <view class="wish-detail" wx:if="{{item.detail}}">{{item.detail}}</view>
+        <view class="wish-meta">
+          <text class="w-tag {{item.mine ? 'mine' : ''}}">{{item.ownerText}}</text>
+          <text class="w-date" wx:if="{{item.doneText}}">{{item.doneText}}</text>
+        </view>
+      </view>
+      <view class="wish-acts">
+        <text class="pact" wx:if="{{item.mine}}" bindtap="openForm" data-id="{{item.id}}">改</text>
+        <text class="pact danger" wx:if="{{item.mine}}" bindtap="del" data-id="{{item.id}}">删</text>
+      </view>
+    </view>
+  </view>
+
+  <button class="fab" bindtap="openForm" wx:if="{{coupled}}">＋</button>
+
+  <!-- 表单 -->
+  <view class="mask" wx:if="{{showForm}}" bindtap="closeForm"></view>
+  <view class="sheet" wx:if="{{showForm}}">
+    <view class="sheet-head">
+      <text class="sheet-title">{{editingId ? '改一下' : '许个愿望'}}</text>
+      <text class="sheet-close" bindtap="closeForm">✕</text>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">我的愿望</text>
+      <input class="form-input" value="{{form.title}}" placeholder="比如：一起去海边、看一场演唱会"
+             placeholder-class="ph" bindinput="onTitle" maxlength="40" />
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">类型</text>
+      <view class="chips">
+        <view class="chip {{form.category === item ? 'sel' : ''}}" wx:for="{{categories}}" wx:key="*this"
+              data-cat="{{item}}" bindtap="onCategory">{{item}}</view>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">期望时间（可不填）</text>
+      <view class="date-row">
+        <picker class="date-picker-wrap" mode="date" value="{{form.target_date || todayText}}" bindchange="onDateChange">
+          <view class="form-input date-box">{{form.target_date || '选择日期'}}</view>
+        </picker>
+        <text class="pact danger" wx:if="{{form.target_date}}" bindtap="clearDate">清除</text>
+      </view>
+    </view>
+
+    <view class="form-row">
+      <text class="form-label">补充说明</text>
+      <textarea class="form-input area" value="{{form.detail}}" placeholder="想去哪、想什么时候、有什么要求…"
+                placeholder-class="ph" bindinput="onDetail" maxlength="120" />
+    </view>
+
+    <button class="primary-btn" bindtap="submit" disabled="{{saving}}">
+      {{saving ? '保存中…' : (editingId ? '保存' : '写下来，通知 TA')}}
+    </button>
+  </view>
+</view>
