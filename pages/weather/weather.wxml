@@ -1,0 +1,86 @@
+<view class="page">
+  <!-- 加载中 -->
+  <view class="card loading" wx:if="{{loading && !weather}}">
+    <view class="spin"></view>
+    <text class="loading-text">正在看天…</text>
+  </view>
+
+  <!-- 主卡片 -->
+  <view class="weather-hero" wx:if="{{weather}}">
+    <view class="hero-bg"></view>
+    <view class="hero-inner">
+      <view class="hero-place">
+        <text class="loc-ico">📍</text>
+        <text class="loc-text">{{city || '当前位置'}}</text>
+      </view>
+
+      <view class="hero-main">
+        <view class="hero-temp">{{weather.temp}}<text class="deg">°</text></view>
+        <view class="hero-side">
+          <text class="hero-icon">{{weather.icon}}</text>
+          <view class="hero-desc">{{weather.text}}</view>
+        </view>
+      </view>
+
+      <view class="hero-range">
+        <text class="range-item">↑ {{weather.high}}°</text>
+        <text class="range-sep"></text>
+        <text class="range-item low">↓ {{weather.low}}°</text>
+        <text class="range-feel">体感 {{weather.feels}}°</text>
+      </view>
+
+      <view class="hero-advice">
+        <text class="advice-ico">💡</text>
+        <text>{{advice}}</text>
+      </view>
+
+      <view class="hero-time" wx:if="{{updatedText}}">{{updatedText}}</view>
+    </view>
+  </view>
+
+  <!-- 详情网格 -->
+  <view class="card" wx:if="{{weather}}">
+    <view class="card-title">今日详情</view>
+    <view class="detail-grid">
+      <view class="detail-item">
+        <view class="detail-ico">💧</view>
+        <view class="detail-val">{{weather.humidity}}%</view>
+        <view class="detail-label">湿度</view>
+      </view>
+      <view class="detail-item">
+        <view class="detail-ico">🌬</view>
+        <view class="detail-val">{{weather.windLevel}}</view>
+        <view class="detail-label">风力</view>
+      </view>
+      <view class="detail-item">
+        <view class="detail-ico">💨</view>
+        <view class="detail-val">{{weather.wind}} km/h</view>
+        <view class="detail-label">风速</view>
+      </view>
+      <view class="detail-item">
+        <view class="detail-ico">🌡</view>
+        <view class="detail-val">{{weather.feels}}°</view>
+        <view class="detail-label">体感温度</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 情侣小贴士 -->
+  <view class="card tip-card" wx:if="{{weather}}">
+    <view class="card-title">情侣小贴士</view>
+    <view class="tip-body">
+      <text class="tip-emoji">{{tipEmoji}}</text>
+      <view class="tip-texts">
+        <view class="tip-main">{{tipMain}}</view>
+        <view class="tip-sub">{{tipSub}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 错误 -->
+  <view class="card error" wx:if="{{!loading && !weather && errorText}}">
+    <view class="error-ico">🌧</view>
+    <view class="error-text">{{errorText}}</view>
+    <button class="retry-btn" bindtap="reload">重试</button>
+  </view>
+</view>
