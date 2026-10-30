@@ -1,0 +1,291 @@
+.page {
+  min-height: 100vh;
+  padding: 24rpx 24rpx 60rpx;
+  background: linear-gradient(180deg, #fff5f7 0%, #fff 40%);
+}
+
+/* ---------- 主卡片 ---------- */
+.weather-hero {
+  position: relative;
+  border-radius: 28rpx;
+  overflow: hidden;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(255, 107, 129, 0.14);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #ff9aa8 0%, #ff6b81 55%, #ff8fa3 100%);
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  right: -60rpx;
+  top: -60rpx;
+  width: 260rpx;
+  height: 260rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+.hero-inner {
+  position: relative;
+  padding: 36rpx 32rpx 32rpx;
+  color: #fff;
+}
+
+.hero-place {
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+  opacity: 0.92;
+  margin-bottom: 16rpx;
+}
+
+.loc-ico {
+  margin-right: 6rpx;
+}
+
+.hero-main {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 18rpx;
+}
+
+.hero-temp {
+  font-size: 108rpx;
+  font-weight: 200;
+  line-height: 0.9;
+  letter-spacing: -4rpx;
+}
+
+.deg {
+  font-size: 56rpx;
+  font-weight: 300;
+  vertical-align: 26rpx;
+  margin-left: 4rpx;
+}
+
+.hero-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 8rpx;
+}
+
+.hero-icon {
+  font-size: 76rpx;
+  line-height: 1;
+  margin-bottom: 8rpx;
+}
+
+.hero-desc {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.hero-range {
+  display: flex;
+  align-items: center;
+  font-size: 26rpx;
+  margin-bottom: 20rpx;
+}
+
+.range-item {
+  font-weight: 500;
+}
+
+.range-item.low {
+  opacity: 0.85;
+}
+
+.range-sep {
+  width: 1rpx;
+  height: 22rpx;
+  background: rgba(255, 255, 255, 0.45);
+  margin: 0 16rpx;
+}
+
+.range-feel {
+  margin-left: auto;
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+.hero-advice {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 16rpx;
+  padding: 16rpx 20rpx;
+  font-size: 25rpx;
+  line-height: 1.5;
+  backdrop-filter: blur(4rpx);
+}
+
+.advice-ico {
+  margin-right: 10rpx;
+}
+
+.hero-time {
+  font-size: 21rpx;
+  opacity: 0.75;
+  margin-top: 16rpx;
+  text-align: right;
+}
+
+/* ---------- 卡片 ---------- */
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+}
+
+.card-title::before {
+  content: '';
+  width: 6rpx;
+  height: 26rpx;
+  background: #ff6b81;
+  border-radius: 3rpx;
+  margin-right: 12rpx;
+}
+
+/* ---------- 详情网格 ---------- */
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+}
+
+.detail-item {
+  background: #fafafa;
+  border-radius: 18rpx;
+  padding: 24rpx 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.detail-ico {
+  font-size: 36rpx;
+  margin-bottom: 10rpx;
+}
+
+.detail-val {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4rpx;
+}
+
+.detail-label {
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* ---------- 小贴士 ---------- */
+.tip-card {
+  background: linear-gradient(135deg, #fff9fa 0%, #fff0f3 100%);
+  border: 1rpx solid rgba(255, 107, 129, 0.1);
+}
+
+.tip-body {
+  display: flex;
+  align-items: center;
+}
+
+.tip-emoji {
+  font-size: 60rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.tip-texts {
+  flex: 1;
+  min-width: 0;
+}
+
+.tip-main {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6rpx;
+}
+
+.tip-sub {
+  font-size: 24rpx;
+  color: #888;
+  line-height: 1.5;
+}
+
+/* ---------- 状态 ---------- */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 80rpx 0;
+}
+
+.spin {
+  width: 48rpx;
+  height: 48rpx;
+  border: 4rpx solid #ffe0e5;
+  border-top-color: #ff6b81;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 20rpx;
+  font-size: 24rpx;
+  color: #999;
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0;
+}
+
+.error-ico {
+  font-size: 64rpx;
+  margin-bottom: 16rpx;
+}
+
+.error-text {
+  font-size: 26rpx;
+  color: #888;
+  margin-bottom: 24rpx;
+}
+
+.retry-btn {
+  background: #ff6b81;
+  color: #fff;
+  font-size: 26rpx;
+  border-radius: 32rpx;
+  padding: 0 48rpx;
+  line-height: 68rpx;
+  border: none;
+}
+
+.retry-btn::after {
+  border: none;
+}
